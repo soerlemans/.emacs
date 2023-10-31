@@ -2,5 +2,5 @@
 # name: C++ destructor
 # key: dtor
 # --
-${1:`(capitalize (replace-regexp-in-string "[-_ ]" "" (file-name-nondirectory (file-name-sans-extension (buffer-file-name)))))`}::~$1()
+${1:`(replace-regexp-in-string "[-_ ]" "" (capitalize (file-name-nondirectory (file-name-sans-extension (buffer-file-name)))))`}::~$1()
 {$0}

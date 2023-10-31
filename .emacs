@@ -76,6 +76,16 @@
   (auto-package-update-maybe))
 
 ;;; Functions
+(defun download-file (t_url)
+	"Download a file if it does not exist yet."
+	(url-copy-file t_url (file-name-nondirectory t_url) 1)
+	)
+
+(defun download-file ()
+	"Download a file if it does not exist yet."
+	(url-copy-file)
+	)
+
 (defun save-to ()
   "Write a copy of the current buffer or region to a file."
   (interactive)
@@ -833,6 +843,7 @@
   (define-auto-insert "\\.\\(lisp\\|ls\\)\\'" ["default.lisp" autoinsert-yas-expand])
   (define-auto-insert "\\.sh\\'" ["default.sh" autoinsert-yas-expand])
   (define-auto-insert "\\.py\\'" ["default.py" autoinsert-yas-expand])
+  (define-auto-insert "\\.md\\'" ["default.md" autoinsert-yas-expand])
   )
 
 ;; FIXME: Undo tree broken?

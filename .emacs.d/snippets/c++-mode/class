@@ -2,10 +2,10 @@
 # name: C++ class
 # key: class
 # --
-class ${2:`(capitalize (replace-regexp-in-string "[-_ ]" "" (file-name-nondirectory (file-name-sans-extension (buffer-file-name)))))`} ${3:: public }${4:Temp} {
+class ${2:`(replace-regexp-in-string "[-_ ]" "" (capitalize (file-name-nondirectory (file-name-sans-extension (buffer-file-name)))))`} ${3:: public }${4} {
 private:
 public:
-	$2();
+	$2() = default;
 	$0
 	virtual ~$2() = default;
 };

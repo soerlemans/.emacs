@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: C++ function
+# key: fn
+# --
+auto $1($3) -> ${3:void}
+{
+$0
+}
