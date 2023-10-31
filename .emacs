@@ -95,7 +95,7 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 						 (path (expand-file-name t_file t_dir)))
 				 (if (not (file-exists-p path))
 						 (download-file url download-dir)
-					 (message "File \"%s\" already exists!" path)))
+					 (message "File \"%s\" already exists!" path))))
 		 t_files)))
 
 (defun save-to ()
