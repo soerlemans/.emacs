@@ -76,15 +76,17 @@
   (auto-package-update-maybe))
 
 ;;; Functions
-(defun download-file (t_url)
+(defun download-file (t_url t_dir)
 	"Download a file if it does not exist yet."
-	(url-copy-file t_url (file-name-nondirectory t_url) 1)
-	)
+	(let* ((filename (file-name-nondirectory t_url))
+				 (path (expand-file-name filename t_dir)))
+		(url-copy-file t_url  t_dir 1)))
 
-(defun download-file ()
-	"Download a file if it does not exist yet."
-	(url-copy-file)
-	)
+(defun github-download-file (t_path t_dir)
+	"Download a file from the configurations github.
+   URL `https://github.com/soerlemans/.emacs/tree/main`''"
+	(let ((url (concat "https://raw.githubusercontent.com/soerlemans/.emacs/main/" t_path)))
+		(download-file url t_dir)))
 
 (defun save-to ()
   "Write a copy of the current buffer or region to a file."
@@ -835,10 +837,24 @@
   (setq auto-insert-query nil)
   (setq auto-insert-directory "~/.emacs.d/templates/")
 
+	;; Fetch files from github
+	(let ((templates
+				 [ "default.c" "default.h"
+					 "default.cpp" "default.hpp"
+					 "default.lisp"
+					 "default.sh"
+					 "default.py"
+					 "default.md"]))
+		(map
+		 (lambda (t_template)
+			 ;; Path of file in repository must match the filesystem path
+			 (github-download-file (".emacs.d/snippets/c++-mode/" t_template)))
+		 templates))
+
   ;; Auto inserts:
   (define-auto-insert "\\.\\(c\\)\\'" ["default.c" autoinsert-yas-expand])
-  (define-auto-insert "\\.\\(cpp\\|cxx|\\)\\'" ["default.cpp" autoinsert-yas-expand])
   (define-auto-insert "\\.\\(h\\)\\'" ["default.h" autoinsert-yas-expand])
+  (define-auto-insert "\\.\\(cpp\\|cxx|\\)\\'" ["default.cpp" autoinsert-yas-expand])
   (define-auto-insert "\\.\\(hpp\\|hxx\\)\\'" ["default.hpp" autoinsert-yas-expand])
   (define-auto-insert "\\.\\(lisp\\|ls\\)\\'" ["default.lisp" autoinsert-yas-expand])
   (define-auto-insert "\\.sh\\'" ["default.sh" autoinsert-yas-expand])
