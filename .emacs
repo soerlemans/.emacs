@@ -837,7 +837,7 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 	:config
 	(add-hook 'find-file-hook 'auto-insert)
 
-	(defun auto-insert-yas-expand ()
+	(defun auto-insert-expand ()
 		"Expand an autoinsert template using yasnippet."
 		(yas-expand-snippet (buffer-string) (point-min) (point-max)))
 
@@ -857,18 +857,17 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 					"default.py"
 					"default.md"]))
 		(github-mirror-download auto-insert-mirror templates))
-	)
 
-;; Auto inserts:
-(define-auto-insert "\\.\\(c\\)\\'" ["default.c" auto-insert-yas-expand])
-(define-auto-insert "\\.\\(h\\)\\'" ["default.h" auto-insert-yas-expand])
-(define-auto-insert "\\.\\(cpp\\|cxx|\\)\\'" ["default.cpp" auto-insert-yas-expand])
-(define-auto-insert "\\.\\(hpp\\|hxx\\)\\'" ["default.hpp" auto-insert-yas-expand])
-(define-auto-insert "\\.\\(lisp\\|ls\\)\\'" ["default.lisp" auto-insert-yas-expand])
-(define-auto-insert "\\.sh\\'" ["default.sh" auto-insert-yas-expand])
-(define-auto-insert "\\.py\\'" ["default.py" auto-insert-yas-expand])
-(define-auto-insert "\\.md\\'" ["default.md" auto-insert-yas-expand])
-)
+	;; Auto inserts:
+	(define-auto-insert "\\.\\(c\\)\\'" ["default.c" auto-insert-expand])
+	(define-auto-insert "\\.\\(h\\)\\'" ["default.h" auto-insert-expand])
+	(define-auto-insert "\\.\\(cpp\\|cxx\\)\\'" ["default.cpp" auto-insert-expand])
+	(define-auto-insert "\\.\\(hpp\\|hxx\\)\\'" ["default.hpp" auto-insert-expand])
+	(define-auto-insert "\\.\\(lisp\\|ls\\)\\'" ["default.lisp" auto-insert-expand])
+	(define-auto-insert "\\.sh\\'" ["default.sh" auto-insert-expand])
+	(define-auto-insert "\\.py\\'" ["default.py" auto-insert-expand])
+	(define-auto-insert "\\.md\\'" ["default.md" auto-insert-expand])
+	)
 
 ;; FIXME: Undo tree broken?
 ;; TODO: Bind undo-tree under SPC u
