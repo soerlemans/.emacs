@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: C++ constructor
+# key: ctor
+# --
+${1:`(capitalize (replace-regexp-in-string "[-_ ]" "" (file-name-nondirectory (file-name-sans-extension (buffer-file-name)))))`}::$1()
+: $2
+{$0}
