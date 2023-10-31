@@ -81,7 +81,7 @@
 	(let* ((filename (file-name-nondirectory t_url))
 				 (path (expand-file-name filename t_dir)))
 		(message "Downloading \"%s\" to %s" t_url path)
-		(url-copy-file t_url path :ok-if-already-exists)))
+		(url-copy-file t_url path 1)))
 
 (defun github-mirror-download (t_dir t_files)
 	"Download a file from my `.emacs` repository github mirror.
@@ -91,8 +91,11 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 				(download-dir (expand-file-name t_dir "~/" )))
 		(mapcar
 		 (lambda (t_file)
-			 (let ((url (concat url-dir t_file)))
-				 (download-file url download-dir)))
+			 (let ((url (concat url-dir t_file))
+						 (path (expand-file-name t_file t_dir)))
+				 (if (not (file-exists-p path))
+						 (download-file url download-dir)
+					 (message "File \"%s\" already exists!" path)))
 		 t_files)))
 
 (defun save-to ()
