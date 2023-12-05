@@ -75,7 +75,17 @@
 
   (auto-package-update-maybe))
 
-;;; Functions
+;;; Functions;
+(defun update-PATH ()
+  "Set up Emacs' `exec-path' and PATH environment variable to match that used by the user's shell."
+  (interactive)
+  (let ((path-from-shell
+				 (replace-regexp-in-string
+					"[ \t\n]*$" ""
+					(shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+    (setenv "PATH" path-from-shell)
+    (setq exec-path (split-string path-from-shell path-separator))))
+
 (defun download-file (t_url t_dir)
 	"Download a file if it does not exist yet."
 	(let* ((filename (file-name-nondirectory t_url))
@@ -183,8 +193,11 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 	:init
 	;; Emacs:Performance
 	;; This speeds up emacs (the defaults are too low)
-	(setq gc-cons-threshold 100000000)       ; Higher garbage threshold = moar speed (10^6)
+	(setq gc-cons-threshold 100000000)           ; Higher garbage threshold = moar speed (10^6)
 	(setq read-process-output-max (* 1024 1024)) ; 1Mb
+
+	;; Source PATH environment variable from terminal and update exec-path
+	(update-PATH)
 
 	:after evil
 	:hook
@@ -854,6 +867,7 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 					"default.cpp" "default.hpp"
 					"default.lisp"
 					"default.sh"
+					"default.zsh"
 					"default.py"
 					"default.md"]))
 		(github-mirror-download auto-insert-mirror templates))
@@ -865,6 +879,7 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 	(define-auto-insert "\\.\\(hpp\\|hxx\\)\\'" ["default.hpp" auto-insert-expand])
 	(define-auto-insert "\\.\\(lisp\\|ls\\)\\'" ["default.lisp" auto-insert-expand])
 	(define-auto-insert "\\.sh\\'" ["default.sh" auto-insert-expand])
+	(define-auto-insert "\\.zsh\\'" ["default.zsh" auto-insert-expand])
 	(define-auto-insert "\\.py\\'" ["default.py" auto-insert-expand])
 	(define-auto-insert "\\.md\\'" ["default.md" auto-insert-expand])
 	)
@@ -974,6 +989,7 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
   ;; (prog-mode . eglot-ensure)
   (c-mode . eglot-ensure) ; Clangd
   (c++-mode . eglot-ensure) ; Clangd
+  (rust-mode . eglot-ensure) ; rust-analyzer
   (python-mode . eglot-ensure) ; pyls
   (go-mode . eglot-ensure) ; gopls
   (sh-mode . eglot-ensure) ; bash-ls
