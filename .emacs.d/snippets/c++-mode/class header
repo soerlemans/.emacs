@@ -1,11 +1,15 @@
 # -*- mode: snippet -*-
-# name: C++ class
-# key: class
+# name: C++ class header
+# key: header
 # --
+#ifndef ${1:`(upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`_HPP}
+#define $1
+
 class ${2:`(capitalize (replace-regexp-in-string "[-_ ]" "" (file-name-nondirectory (file-name-sans-extension (buffer-file-name)))))`} ${3:: public }${4:Temp} {
 private:
 public:
 	$2();
-	$0
 	virtual ~$2() = default;
 };
+
+#endif // $1

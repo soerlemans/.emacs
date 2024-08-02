@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: C++ class header
+# key: cpp class header
+# --
+#ifndef $1_HPP
+#define $1_HPP
+
+class $2 {
+private:
+public:
+	virtual ~$2();
+};
+
+#endif // $1_HPP
