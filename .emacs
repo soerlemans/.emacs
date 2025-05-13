@@ -54,12 +54,6 @@
 ;;   :global t
 ;;   :keymap (make-sparse-keymap))
 
-;; TODO: Config later for different packages.
-;; Use :ensure-system-package to detect binaries.
-;; Use this especially for eglot/LSP mode.
-(use-package use-package-ensure-system-package
-  :ensure t)
-
 ;; Emacs asynchronous library
 (use-package async
   :ensure t
@@ -81,16 +75,16 @@
   "Set up Emacs' `exec-path' and PATH environment variable to match that used by the user's shell."
   (interactive)
   (let ((path-from-shell
-	 (replace-regexp-in-string
-	  "[ \t\n]*$" ""
-	  (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+				 (replace-regexp-in-string
+					"[ \t\n]*$" ""
+					(shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
     (setenv "PATH" path-from-shell)
     (setq exec-path (split-string path-from-shell path-separator))))
 
 (defun download-file (t_url t_dir)
   "Download a file if it does not exist yet."
   (let* ((filename (file-name-nondirectory t_url))
-	 (path (expand-file-name filename t_dir)))
+				 (path (expand-file-name filename t_dir)))
     (message "Downloading \"%s\" to %s" t_url path)
     (url-copy-file t_url path 1)))
 
@@ -99,29 +93,29 @@
 This mirror mimicks the filesystem of your home directory.
 URL `https://github.com/soerlemans/.emacs/tree/main`''"
   (let ((url-dir (concat "https://raw.githubusercontent.com/soerlemans/.emacs/main/" t_dir))
-	(download-dir (expand-file-name t_dir "~/" )))
+				(download-dir (expand-file-name t_dir "~/" )))
     (mapcar
      (lambda (t_file)
        (let ((url (concat url-dir t_file))
-	     (path (expand-file-name t_file t_dir)))
-	 (if (not (file-exists-p path))
-	     (download-file url download-dir)
-	   (message "File \"%s\" already exists!" path))))
+						 (path (expand-file-name t_file t_dir)))
+				 (if (not (file-exists-p path))
+						 (download-file url download-dir)
+					 (message "File \"%s\" already exists!" path))))
      t_files)))
 
 (defun save-to ()
   "Write a copy of the current buffer or region to a file."
   (interactive)
   (let* ((curr (buffer-file-name))
-	 (new (read-file-name
-	       "Copy to file: " nil nil nil
-	       (and curr (file-name-nondirectory curr))))
-	 (mustbenew (if (and curr (file-equal-p new curr)) 'excl t)))
+				 (new (read-file-name
+							 "Copy to file: " nil nil nil
+							 (and curr (file-name-nondirectory curr))))
+				 (mustbenew (if (and curr (file-equal-p new curr)) 'excl t)))
     (if (use-region-p)
-	(write-region (region-beginning) (region-end) new nil nil nil mustbenew)
+				(write-region (region-beginning) (region-end) new nil nil nil mustbenew)
       (save-restriction
-	(widen)
-	(write-region (point-min) (point-max) new nil nil nil mustbenew)))))
+				(widen)
+				(write-region (point-min) (point-max) new nil nil nil mustbenew)))))
 
 (defun cursor-indicator ()
   "Change cursor based on evil state."
@@ -140,12 +134,12 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 
   ;; TODO: Have the cursor colors change with the evil-state
   (setq cursor-type
-	(cond
-	 ;; (buffer-read-only 'hollow) ; FIXME: Does not work.
-	 ((eq evil-state 'insert) 'bar)
-	 ((eq evil-state 'replace) 'hbar)
-	 ((eq evil-state 'visual) 'hollow)
-	 (t 'box)))
+				(cond
+				 ;; (buffer-read-only 'hollow) ; FIXME: Does not work.
+				 ((eq evil-state 'insert) 'bar)
+				 ((eq evil-state 'replace) 'hbar)
+				 ((eq evil-state 'visual) 'hollow)
+				 (t 'box)))
   )
 
 (defun indicator ()
@@ -184,12 +178,12 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
   "Do what I mean tab (format, skip paren or)."
   (interactive)
   (let* ((characters (cl-coerce "(){}[]\"\'" 'list))
-	 (start-point (point))
-	 (end-point (+ start-point 2)))
+				 (start-point (point))
+				 (end-point (+ start-point 2)))
     (dolist (c characters)
       (if (string-match-p (char-to-string c) (buffer-substring-no-properties start-point end-point))
-	  (forward-char)
-	(indent-for-tab-command)))))
+					(forward-char)
+				(indent-for-tab-command)))))
 
 ;;; Packages
 ;;- Set Emacs defaults:
@@ -305,9 +299,9 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
   (setq auto-save-default nil)
 
   (setq delete-old-versions t
-	kept-new-versions 5
-	kept-old-versions 2
-	version-control t)
+				kept-new-versions 5
+				kept-old-versions 2
+				version-control t)
 
   ;; Emacs:Silence warnings
   (setq native-comp-async-report-warnings-errors nil))
@@ -361,7 +355,7 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
     ("+" text-scale-increase "increase")
     ("=" text-scale-increase "increase")
     ("q" (if (bound-and-true-p text-scale-mode)
-	     (text-scale-mode 0)) "quit"))
+						 (text-scale-mode 0)) "quit"))
 
   (general-define-key
    :states 'normal
@@ -458,8 +452,8 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
   :config
   ;; Display register information in posframe
   (setq evil-owl-display-method 'posframe
-	evil-owl-extra-posframe-args '(:width 50 :height 20 :border-width 1 :border-color "#FFFFFF")
-	evil-owl-max-string-length 50)
+				evil-owl-extra-posframe-args '(:width 50 :height 20 :border-width 1 :border-color "#FFFFFF")
+				evil-owl-max-string-length 50)
   (evil-owl-mode t))
 
 ;; Multicursors with evil keybinds
@@ -574,8 +568,8 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 
   ;; Make swiper contain less lines to as it fills to much of the screen
   (setq ivy-posframe-height-alist
-	'((swiper . 20)
-	  (t      . 30)))
+				'((swiper . 20)
+					(t      . 30)))
 
   (ivy-posframe-mode t))
 
@@ -634,11 +628,11 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 
   ;; (add-to-list '(desktops . dashboard-desktops))
   (setq dashboard-items '((agenda . 5)
-			  (recents  . 5)
-			  (bookmarks . 5)
-			  (projects . 10)
-			  ;; (desktops . 5)
-			  (registers . 5)))
+													(recents  . 5)
+													(bookmarks . 5)
+													(projects . 10)
+													;; (desktops . 5)
+													(registers . 5)))
 
   ;; Dashboard:Icons
   (setq dashboard-set-heading-icons t)
@@ -649,7 +643,7 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 
   ;; Set dashboard to the initial buffer for emacs-daemon instances
   (setq initial-buffer-choice
-	(lambda () (get-buffer "*dashboard*")))
+				(lambda () (get-buffer "*dashboard*")))
   )
 
 (use-package desktop
@@ -867,14 +861,15 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 
   ;; Fetch autoinsert templates from github mirror
   (let ((templates
-	 ["default.c" "default.h"
-	  "default.mpp"
-	  "default.cpp" "default.hpp"
-	  "default.lisp"
-	  "default.sh"
-	  "default.zsh"
-	  "default.py"
-	  "default.md"]))
+				 ["default.c" "default.h"
+					"default.mpp"
+					"default.cpp" "default.hpp"
+					"default.go"
+					"default.lisp"
+					"default.sh"
+					"default.zsh"
+					"default.py"
+					"default.md"]))
     (github-mirror-download auto-insert-mirror templates))
 
   ;; Auto inserts:
@@ -883,6 +878,7 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
   (define-auto-insert "\\.\\(mpp\\)\\'" ["default.mpp" auto-insert-expand])
   (define-auto-insert "\\.\\(cpp\\|cxx\\)\\'" ["default.cpp" auto-insert-expand])
   (define-auto-insert "\\.\\(hpp\\|hxx\\)\\'" ["default.hpp" auto-insert-expand])
+  (define-auto-insert "\\.\\(go\\)\\'" ["default.go" auto-insert-expand])
   (define-auto-insert "\\.\\(lisp\\|ls\\)\\'" ["default.lisp" auto-insert-expand])
   (define-auto-insert "\\.sh\\'" ["default.sh" auto-insert-expand])
   (define-auto-insert "\\.zsh\\'" ["default.zsh" auto-insert-expand])
@@ -991,6 +987,9 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
 (use-package eglot
   :ensure t
   :after (evil company)
+	;; :ensure-system-package
+	;; TODO: Add ensure-system-package tags for clangd, gopls, bas-ls, etc.
+
   :hook
   ;; (prog-mode . eglot-ensure)
   (c-mode . eglot-ensure) ; Clangd
@@ -1006,17 +1005,17 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
   (LaTeX-mode . eglot-ensure) ; digestif
   :config
   ;; Eglot:Clangd config
-  (defun eglot-clangd-options ()
-    "Set clangd options for eglot."
-    (let ((cmd (car (eglot--guess-contact 'clangd))))
-      (add-to-list 'cmd "--header-insertion=never")
-      (add-to-list 'cmd "--header-insertion-decorators=0")
-      (list :clangd
-	    (list :command cmd
-		  :initializationOptions (list :inlayHints :enabled nil)))))
-
-  (add-to-list 'eglot-server-programs '(c++-mode . eglot-clangd-options))
-  (add-to-list 'eglot-server-programs '(c-mode . eglot-clangd-options))
+  (add-to-list 'eglot-server-programs
+               '((c-ts-mode c++-ts-mode c-mode c++-mode)
+                 . ("clangd"
+                    "-j=8"
+                    "--log=error"
+                    "--background-index"
+                    "--clang-tidy"
+                    "--completion-style=detailed"
+                    "--pch-storage=memory"
+                    "--header-insertion=never"
+                    "--header-insertion-decorators=0")))
 
   ;; Eglot:Keybinds
   (general-define-key
@@ -1196,11 +1195,13 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
    "d" 'magit-ediff-dwim))
 
 ;; Display git diffs on branch:
-(use-package git-gutter+
+(use-package git-gutter
   :ensure t
   :defer 5
+	:hook
+  (prog-mode . git-gutter) ; Hook git-gutter into every programming buffer.
   :config
-  (global-git-gutter+-mode t))
+  (global-git-gutter-mode +1))
 
 ;;- OS interaction:
 ;; Change user to edit a file
@@ -1219,6 +1220,15 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
   :config
   (xclip-mode t))
 
+
+;; FIXME: For some fucking reason this gets missed in .emacs config.
+;; So I appended this to make 100% sure we are not creating backup files.
+;; Someday I will have to solve this.
+(setq make-backup-files nil)
+
+;; TEMP: Temporary used to load crowlang-mode I am working on.
+;; (load "~/Projects/Git/Private/crowlang-mode/crowlang-mode.el")
+
 ;;; End of Config
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -1226,28 +1236,19 @@ URL `https://github.com/soerlemans/.emacs/tree/main`''"
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
+	 [default default default italic underline success warning error])
  '(ansi-color-names-vector
-   ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
+	 ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1"
+		"#e1e1e0"])
  '(custom-enabled-themes '(manoj-dark))
  '(hl-todo-keyword-faces
-   '(("TODO" . "#E5E221")
-     ("NEXT" . "#E5E221")
-     ("THEM" . "#57ACA0")
-     ("PROG" . "#0756A1")
-     ("OKAY" . "#0756A1")
-     ("DONT" . "#C2BC31")
-     ("FAIL" . "#C2BC31")
-     ("DONE" . "#fbfc37")
-     ("NOTE" . "#E5E221")
-     ("KLUDGE" . "#E5E221")
-     ("HACK" . "#E5E221")
-     ("TEMP" . "#E5E221")
-     ("FIXME" . "#E5E221")
-     ("XXX+" . "#E5E221")
-     ("\\?\\?\\?+" . "#E5E221")))
- '(package-selected-packages
-   '(use-package-ensure-system-package dracula-theme editorconfig swift3-mode shell-pop shell-here typescript-mode highlight-doxygen prism vdiff plantuml-mode toml-mode flycheck-clang-tidy rust-mode cmake-mode bison-mode vertico helpful yasnippet-snippets yasnippet-classic-snippets yaml-mode xclip which-key-posframe web-mode use-package undo-tree treemacs-projectile treemacs-all-the-icons switch-window sudo-edit smart-tabs-mode slime-company sass-mode rainbow-delimiters powerline-evil perspective nyan-mode melancholy-theme markdown-preview-mode magit lsp-ui lsp-treemacs lsp-ivy ivy-yasnippet ivy-rich ivy-posframe ivy-avy indent-guide go-mode git-gutter+ general format-all flycheck flatland-theme fira-code-mode evil-visualstar evil-surround evil-owl evil-numbers evil-multiedit evil-indent-plus evil-goggles evil-commentary elpy elcord eglot dockerfile-mode dashboard counsel company-shell company-math company-box company-auctex common-lisp-snippets chess centaur-tabs beacon auto-package-update async arduino-mode))
+	 '(("TODO" . "#E5E221") ("NEXT" . "#E5E221") ("THEM" . "#57ACA0")
+		 ("PROG" . "#0756A1") ("OKAY" . "#0756A1") ("DONT" . "#C2BC31")
+		 ("FAIL" . "#C2BC31") ("DONE" . "#fbfc37") ("NOTE" . "#E5E221")
+		 ("KLUDGE" . "#E5E221") ("HACK" . "#E5E221") ("TEMP" . "#E5E221")
+		 ("FIXME" . "#E5E221") ("XXX+" . "#E5E221")
+		 ("\\?\\?\\?+" . "#E5E221")))
+ '(package-selected-packages nil)
  '(send-mail-function 'mailclient-send-it)
  '(slime-company-display-arglist t)
  '(tags-apropos-additional-actions '(("Common Lisp" clhs-doc clhs-symbols))))
